@@ -140,7 +140,11 @@ function initNavHighlight() {
         navLinks.forEach((link) => {
           const isActive = link.getAttribute('href') === `#${id}`;
           link.classList.toggle('is-active', isActive);
-          link.toggleAttribute('aria-current', isActive);
+          if (isActive) {
+            link.setAttribute('aria-current', 'true');
+          } else {
+            link.removeAttribute('aria-current');
+          }
         });
       });
     },
@@ -193,6 +197,9 @@ function runPageLoadSequence() {
   gsap.set(cards, { opacity: 0, y: 20 });
   gsap.set(navLinks, { opacity: 0, x: -8 });
   gsap.set([tagline, badge], { opacity: 0, y: 12 });
+
+  // Preserve full text for screen readers before splitting into individual char spans
+  title.setAttribute('aria-label', title.textContent.trim());
 
   // Split and hide title characters
   const chars = splitChars(title);

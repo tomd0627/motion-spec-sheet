@@ -16,6 +16,9 @@ node_modules/
 Thumbs.db
 Desktop.ini
 
+# Claude Code local config
+.claude/
+
 # Editor configs
 .vscode/*
 !.vscode/settings.json

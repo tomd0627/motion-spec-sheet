@@ -1,0 +1,83 @@
+/* ─── Keyframes ─────────────────────────────────────────────────────────────── */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ─── GSAP-managed initial states ───────────────────────────────────────────── */
+
+/* Applied before GSAP loads to prevent flash of unstyled content.
+   JS adds .js-ready to <html> immediately; GSAP then animates from these states. */
+.js-ready .anim-target {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Header character split — each char is hidden until GSAP reveals it */
+.js-ready .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* Nav items */
+.js-ready .category-nav__link {
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+/* ─── State classes toggled by JS ───────────────────────────────────────────── */
+
+/* Demo target in its resting (start) position */
+.demo-target,
+.demo-dot {
+  will-change: transform, opacity;
+}
+
+/* Cards during page-load reveal */
+.spec-card {
+  will-change: opacity, transform;
+}
+
+/* ─── Reduced motion overrides ──────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Disable all CSS transitions and animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Remove will-change hints — no animation to optimize */
+  .demo-target,
+  .demo-dot,
+  .spec-card {
+    will-change: auto;
+  }
+
+  /* Replay button is non-functional when motion is reduced */
+  .replay-btn {
+    cursor: default;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+}

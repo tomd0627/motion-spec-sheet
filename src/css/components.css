@@ -1,0 +1,269 @@
+/* ─── Spec Card ─────────────────────────────────────────────────────────────── */
+
+.spec-card {
+  background-color: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: border-color var(--duration-base) var(--ease-ui);
+}
+
+.spec-card:hover {
+  border-color: var(--c-text-muted);
+}
+
+/* Card header */
+.spec-card__header {
+  align-items: baseline;
+  border-block-end: 1px solid var(--c-border);
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+  padding-block: var(--space-4);
+  padding-inline: var(--space-5);
+}
+
+.spec-card__title {
+  color: var(--c-text);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spec-card__tag {
+  background-color: color-mix(in srgb, var(--tag-color, var(--c-accent)) 15%, transparent);
+  border-radius: 100px;
+  color: var(--tag-color, var(--c-accent));
+  flex-shrink: 0;
+  font-family: var(--font-code);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-3);
+  text-transform: uppercase;
+}
+
+/* Demo stage */
+.spec-card__stage {
+  border-block-end: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block: var(--space-5);
+  padding-inline: var(--space-5);
+}
+
+/* Demo track — single sliding target */
+.demo-track {
+  align-items: center;
+  block-size: 40px;
+  display: flex;
+  position: relative;
+}
+
+.demo-track::before {
+  background-color: var(--c-border);
+  block-size: 1px;
+  content: '';
+  inset-block-start: 50%;
+  inset-inline: 0;
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+.demo-target {
+  background-color: var(--c-accent);
+  block-size: 20px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  inline-size: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Demo track — stagger dots layout */
+.demo-track--dots {
+  align-items: flex-end;
+  block-size: 64px;
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.demo-track--dots::before {
+  display: none;
+}
+
+.demo-dot {
+  background-color: var(--c-accent);
+  block-size: 12px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  inline-size: 12px;
+}
+
+/* Demo track — grid layout for grid stagger demos */
+.demo-track--grid {
+  align-items: center;
+  block-size: 72px;
+  display: grid;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+/* Demo track — two dots side by side (timeline demos) */
+.demo-track--pair {
+  align-items: flex-end;
+  block-size: 64px;
+  display: flex;
+  gap: var(--space-8);
+  justify-content: center;
+  overflow: visible;
+}
+
+.demo-track--pair::before {
+  display: none;
+}
+
+/* Stage footer row (track + replay button) */
+.spec-card__stage-row {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+/* Replay button */
+.replay-btn {
+  align-items: center;
+  align-self: flex-end;
+  background-color: var(--c-surface-hi);
+  block-size: 32px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  color: var(--c-text-2);
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 0.9375rem;
+  gap: var(--space-2);
+  inline-size: 32px;
+  justify-content: center;
+  transition:
+    background-color var(--duration-fast) var(--ease-ui),
+    border-color var(--duration-fast) var(--ease-ui),
+    color var(--duration-fast) var(--ease-ui),
+    transform var(--duration-fast) var(--ease-ui);
+}
+
+.replay-btn:hover {
+  background-color: var(--c-accent-dim);
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+
+.replay-btn:active {
+  transform: scale(0.92);
+}
+
+.replay-btn.is-spinning .icon {
+  animation: spin 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Code block */
+.spec-card__code {
+  flex: 1;
+  position: relative;
+}
+
+.code-block {
+  background-color: var(--c-bg);
+  block-size: 100%;
+  color: var(--c-text);
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+  line-height: 1.7;
+  min-block-size: 96px;
+  overflow-x: auto;
+  padding-block: var(--space-4);
+  padding-inline: var(--space-5);
+  padding-inline-end: var(--space-12);
+  scrollbar-width: thin;
+  tab-size: 2;
+  white-space: pre;
+}
+
+/* Copy button */
+.copy-btn {
+  align-items: center;
+  background-color: var(--c-surface-hi);
+  block-size: 28px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  color: var(--c-text-muted);
+  display: inline-flex;
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  gap: var(--space-1);
+  inline-size: 28px;
+  inset-block-start: var(--space-3);
+  inset-inline-end: var(--space-3);
+  justify-content: center;
+  position: absolute;
+  transition:
+    background-color var(--duration-fast) var(--ease-ui),
+    border-color var(--duration-fast) var(--ease-ui),
+    color var(--duration-fast) var(--ease-ui);
+}
+
+.copy-btn:hover {
+  background-color: var(--c-accent-dim);
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+
+.copy-btn.is-copied {
+  background-color: color-mix(in srgb, var(--c-tag-stagger) 15%, transparent);
+  border-color: var(--c-tag-stagger);
+  color: var(--c-tag-stagger);
+}
+
+.copy-btn .icon {
+  block-size: 0.875rem;
+  inline-size: 0.875rem;
+}
+
+/* Card description */
+.spec-card__desc {
+  border-block-start: 1px solid var(--c-border);
+  color: var(--c-text-2);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  padding-block: var(--space-4);
+  padding-inline: var(--space-5);
+}
+
+/* ─── noscript notice ───────────────────────────────────────────────────────── */
+
+.noscript-notice {
+  background-color: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  color: var(--c-text-2);
+  font-size: 0.875rem;
+  padding-block: var(--space-8);
+  padding-inline: var(--space-6);
+  text-align: center;
+}
+
+.noscript-notice strong {
+  color: var(--c-text);
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  margin-block-end: var(--space-2);
+}

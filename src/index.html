@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion Spec Sheet — GSAP Animation Primitives</title>
+    <meta
+      name="description"
+      content="A living reference of GSAP animation primitives — eases, spring approximations, stagger patterns, and playback controls. Each entry shows a live looping demo, configuration object, and copy-ready code."
+    />
+    <meta name="theme-color" content="#0e0e10" />
+
+    <!-- Google Fonts preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Fonts: Space Mono (display), Inter (UI), JetBrains Mono (code) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/layout.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/animations.css" />
+
+    <!-- Mark JS available immediately to prevent FOUC on animated elements -->
+    <script>
+      document.documentElement.classList.add('js-ready');
+    </script>
+  </head>
+
+  <body>
+    <!-- SVG icon sprite (inline — no CDN dependency, zero extra requests) -->
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: none">
+      <defs>
+        <!-- Eases: sine wave representing a smooth ease curve -->
+        <symbol id="icon-wave" viewBox="0 0 24 24">
+          <path d="M2 12c1.333-5.333 3.333-8 5-8s3.667 2.667 5 8 3.333 8 5 8 3.667-2.667 5-8" />
+        </symbol>
+        <!-- Springs: oscillating coil (distinct from smooth sine wave by its tight arcs) -->
+        <symbol id="icon-spring" viewBox="0 0 24 24">
+          <path d="M4 12C5.5 4 8.5 4 10 12C11.5 20 14.5 20 16 12C17.5 4 20.5 4 22 12" />
+        </symbol>
+        <!-- Staggers: three bars of increasing offset -->
+        <symbol id="icon-stack" viewBox="0 0 24 24">
+          <rect x="3" y="6" width="18" height="2.5" rx="1.25" />
+          <rect x="3" y="11" width="14" height="2.5" rx="1.25" />
+          <rect x="3" y="16" width="10" height="2.5" rx="1.25" />
+        </symbol>
+        <!-- Playback: clock / timer -->
+        <symbol id="icon-timer" viewBox="0 0 24 24">
+          <circle cx="12" cy="13" r="9" />
+          <path d="M12 8v5l3 3" />
+          <path d="M9 3h6" />
+        </symbol>
+        <!-- Replay: counter-clockwise circular arrow -->
+        <symbol id="icon-replay" viewBox="0 0 24 24">
+          <path d="M3 12a9 9 0 1 0 .75-3.6" />
+          <polyline points="1 4 3 12 11 9.75" />
+        </symbol>
+        <!-- Copy: two overlapping squares -->
+        <symbol id="icon-copy" viewBox="0 0 24 24">
+          <rect x="9" y="9" width="13" height="13" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </symbol>
+        <!-- Check: copied state confirmation -->
+        <symbol id="icon-check" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12" />
+        </symbol>
+        <!-- Pause circle: reduced motion indicator -->
+        <symbol id="icon-pause" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="10" y1="8" x2="10" y2="16" />
+          <line x1="14" y1="8" x2="14" y2="16" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <!-- Skip navigation for keyboard users -->
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <!-- Reduced motion notice — shown by JS when prefers-reduced-motion is active -->
+    <div class="reduced-motion-banner" role="status" aria-live="polite" hidden>
+      <svg class="icon" aria-hidden="true" focusable="false">
+        <use href="#icon-pause" />
+      </svg>
+      <p>Animations are paused — your system prefers reduced motion.</p>
+    </div>
+
+    <!-- Site header -->
+    <header class="site-header">
+      <div class="container">
+        <div class="site-header__inner">
+          <div class="site-header__brand">
+            <h1 class="site-title anim-target">Motion Spec Sheet</h1>
+            <p class="site-tagline anim-target">GSAP animation primitives — live reference</p>
+          </div>
+          <div class="site-header__meta anim-target">
+            <span class="gsap-badge">GSAP 3.12</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Category navigation -->
+    <nav class="category-nav" aria-label="Animation categories">
+      <div class="container">
+        <ul class="category-nav__list" role="list">
+          <li>
+            <a class="category-nav__link" href="#eases" data-category="eases">
+              <svg class="icon" aria-hidden="true" focusable="false">
+                <use href="#icon-wave" />
+              </svg>
+              Eases
+            </a>
+          </li>
+          <li>
+            <a class="category-nav__link" href="#springs" data-category="springs">
+              <svg class="icon" aria-hidden="true" focusable="false">
+                <use href="#icon-spring" />
+              </svg>
+              Springs
+            </a>
+          </li>
+          <li>
+            <a class="category-nav__link" href="#staggers" data-category="staggers">
+              <svg class="icon" aria-hidden="true" focusable="false">
+                <use href="#icon-stack" />
+              </svg>
+              Staggers
+            </a>
+          </li>
+          <li>
+            <a class="category-nav__link" href="#playback" data-category="playback">
+              <svg class="icon" aria-hidden="true" focusable="false">
+                <use href="#icon-timer" />
+              </svg>
+              Playback
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main-content" id="main-content">
+      <div class="container">
+        <!-- Eases section -->
+        <section class="category-section" id="eases" aria-labelledby="eases-heading">
+          <header class="section-header anim-target">
+            <h2 class="section-title" id="eases-heading">
+              <span class="section-tag" style="--tag-color: var(--c-tag-ease)">Eases</span>
+            </h2>
+            <p class="section-desc">
+              Predefined easing functions that control velocity over time. GSAP includes Power,
+              Expo, Circ, Back, Elastic, Bounce, Steps, and more — each with
+              <code>in</code>, <code>out</code>, and <code>inOut</code> variants.
+            </p>
+          </header>
+          <div class="spec-grid" id="grid-eases" data-category="eases">
+            <noscript>
+              <div class="noscript-notice">
+                <strong>JavaScript required</strong>
+                Live animation demos require JavaScript. Enable JS to view all entries.
+              </div>
+            </noscript>
+          </div>
+        </section>
+
+        <!-- Springs section -->
+        <section class="category-section" id="springs" aria-labelledby="springs-heading">
+          <header class="section-header anim-target">
+            <h2 class="section-title" id="springs-heading">
+              <span class="section-tag" style="--tag-color: var(--c-tag-spring)">Springs</span>
+            </h2>
+            <p class="section-desc">
+              Spring approximations using GSAP's Elastic ease.
+              <code>amplitude</code> maps to stiffness; <code>period</code> maps to damping. Each
+              entry notes the CSS <code>spring()</code> equivalent for cross-reference.
+            </p>
+          </header>
+          <div class="spec-grid" id="grid-springs" data-category="springs">
+            <noscript>
+              <div class="noscript-notice">
+                <strong>JavaScript required</strong>
+                Live animation demos require JavaScript. Enable JS to view all entries.
+              </div>
+            </noscript>
+          </div>
+        </section>
+
+        <!-- Staggers section -->
+        <section class="category-section" id="staggers" aria-labelledby="staggers-heading">
+          <header class="section-header anim-target">
+            <h2 class="section-title" id="staggers-heading">
+              <span class="section-tag" style="--tag-color: var(--c-tag-stagger)">Staggers</span>
+            </h2>
+            <p class="section-desc">
+              Offset each element's animation start time. Control by total
+              <code>amount</code>, per-element <code>each</code> duration, origin
+              <code>from</code> point, or a <code>grid</code> layout for 2D spatial offsets.
+            </p>
+          </header>
+          <div class="spec-grid" id="grid-staggers" data-category="staggers">
+            <noscript>
+              <div class="noscript-notice">
+                <strong>JavaScript required</strong>
+                Live animation demos require JavaScript. Enable JS to view all entries.
+              </div>
+            </noscript>
+          </div>
+        </section>
+
+        <!-- Playback controls section -->
+        <section class="category-section" id="playback" aria-labelledby="playback-heading">
+          <header class="section-header anim-target">
+            <h2 class="section-title" id="playback-heading">
+              <span class="section-tag" style="--tag-color: var(--c-tag-playback)">
+                Playback Controls
+              </span>
+            </h2>
+            <p class="section-desc">
+              Repeat, yoyo, delay, timeline positioning, and time scale. The mechanics of
+              controlling <em>when</em> and <em>how</em> animations play — independent of the ease
+              applied.
+            </p>
+          </header>
+          <div class="spec-grid" id="grid-playback" data-category="playback">
+            <noscript>
+              <div class="noscript-notice">
+                <strong>JavaScript required</strong>
+                Live animation demos require JavaScript. Enable JS to view all entries.
+              </div>
+            </noscript>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <p class="site-footer__text">
+          Motion Spec Sheet — GSAP 3.12 animation primitives reference
+        </p>
+      </div>
+    </footer>
+
+    <!-- GSAP (free tier via CDN) — loaded before main.js to ensure gsap is available -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/CustomEase.min.js" defer></script>
+
+    <!-- App entry point (ES module, runs after GSAP is available) -->
+    <script type="module" src="/js/main.js" defer></script>
+  </body>
+</html>

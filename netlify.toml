@@ -1,0 +1,27 @@
+[build]
+  publish = "src"
+
+# Security headers for all routes
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Permissions-Policy   = "camera=(), geolocation=(), microphone=()"
+    Referrer-Policy      = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options      = "SAMEORIGIN"
+
+# Long-lived immutable cache for versioned static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
